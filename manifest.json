@@ -1,11 +1,10 @@
 {
-	"id": "sample-plugin",
-	"name": "Sample Plugin",
+	"id": "external-links",
+	"name": "External Links",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
-	"authorUrl": "https://obsidian.md",
-	"fundingUrl": "https://obsidian.md/pricing",
+	"description": "Show external links on the right side panel",
+	"author": "Juan Vimberg",
+	"authorUrl": "https://github.com/jivimberg/",
 	"isDesktopOnly": false
 }
