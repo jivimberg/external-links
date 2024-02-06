@@ -103,15 +103,22 @@ export class Indexer {
 	}
 }
 
-const regexMdLinks =  /\[([^[]+)](\(.*\))/gm
+const mdLinksRegex = /^\[([\w\s\d]+)]\((https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*))\)$/gm
+const orphanedLinkRegex = /(https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*))/gm
 
 const scanFile = (content: string, file: TFile): ExternalLink[] => {
 	const result: ExternalLink[] = [];
 
-	const mdLinks = content.matchAll(regexMdLinks);
+	const mdLinks = content.matchAll(mdLinksRegex);
 
 	for (const mdLink of mdLinks) {
 		result.push(new ExternalLink(mdLink[1], mdLink[2], file));
+	}
+
+	const orphanedLinks = content.matchAll(orphanedLinkRegex);
+
+	for (const orphanedLink of orphanedLinks) {
+		result.push(new ExternalLink(orphanedLink[1], orphanedLink[1], file));
 	}
 
 	return result;
