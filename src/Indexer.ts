@@ -1,6 +1,7 @@
 import {ExternalLink} from "./ExternalLink";
 import {TFile} from "obsidian";
 import ExternalLinksPlugin from "./main";
+import {AnyType} from "@typescript-eslint/type-utils";
 
 export class Indexer {
 
@@ -50,11 +51,15 @@ export class Indexer {
 	}
 
 	scanAllFiles = () => {
-		this.plugin.app.vault.getMarkdownFiles().forEach((file) => {
-			this.plugin.app.vault.cachedRead(file).then((content) => {
+		const promises: Promise<void>[] = this.plugin.app.vault.getMarkdownFiles()
+			.map(async (file) => {
+				const content = await this.plugin.app.vault.cachedRead(file);
 				const links = scanFile(content, file);
 				this.addFileToIndices(file, links);
 			});
+
+		Promise.all(promises).then(() => {
+			this.notifyListeners();
 		});
 	}
 

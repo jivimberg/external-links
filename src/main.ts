@@ -9,6 +9,11 @@ export default class ExternalLinksPlugin extends Plugin {
 	async onload() {
 		console.log('loading plugin');
 		this.indexer = new Indexer(this);
+
+		this.app.workspace.onLayoutReady(() => {
+			return this.indexer.scanAllFiles();
+		});
+
 		this.indexer.scanAllFiles()
 
 		this.registerView(
