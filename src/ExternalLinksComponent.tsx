@@ -4,6 +4,8 @@ import {ExternalLink} from "./ExternalLink";
 import {App, TFile} from "obsidian";
 import {Indexer} from "./Indexer";
 import {TreeItem, TreeView} from "@mui/x-tree-view";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 type ExternalLinksViewProps = {
 	app: App;
@@ -48,7 +50,10 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 					<div className="tree-item-flair">{externalLinks.length}</div>
 				</div>
 			</div>
-			<TreeView>
+			<TreeView
+				defaultCollapseIcon={<ExpandMoreIcon />}
+				defaultExpandIcon={<ChevronRightIcon />}
+			>
 			{externalLinks.map((el, index) => {
 				const nodeId = `${activeFile?.path}-${index}`;
 				return (
