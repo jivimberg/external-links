@@ -21,3 +21,4 @@ ELH lets you configure which types of links to index in settings. I might do thi
 6. Check that the CSS classes are still working even when the outgoing links plugin gets disabled
 7. Change side panel icon
 8. Make sure things disappear if the active file is closed
+9. Show links in the order they appear in the file?

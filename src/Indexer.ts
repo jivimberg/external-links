@@ -1,7 +1,6 @@
 import {ExternalLink} from "./ExternalLink";
 import {TFile} from "obsidian";
 import ExternalLinksPlugin from "./main";
-import {AnyType} from "@typescript-eslint/type-utils";
 
 export class Indexer {
 

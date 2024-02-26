@@ -1,8 +1,9 @@
 import * as React from "react";
-import {ExternalLink} from "./ExternalLink";
 import {useEffect, useState} from "react";
+import {ExternalLink} from "./ExternalLink";
 import {App, TFile} from "obsidian";
 import {Indexer} from "./Indexer";
+import {TreeItem, TreeView} from "@mui/x-tree-view";
 
 type ExternalLinksViewProps = {
 	app: App;
@@ -41,34 +42,57 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 
 	return (
 		<div className="outgoing-link-pane">
-			<div className="tree-item-self is-clickable">
+			<div className="tree-item-self">
 				<div className="tree-item-inner">External links</div>
 				<div className="tree-item-flair-outer">
 					<div className="tree-item-flair">{externalLinks.length}</div>
 				</div>
 			</div>
-			<div className="search-result-container">
-				{externalLinks.map((el) => {
-					return (
-						<div key={`${el.Text}${el.Url}${el.File.path}`} className="tree-item-self is-clickable outgoing-link-item">
-							<div>
-								<span className="tree-item-icon">
-								<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="svg-icon lucide-link">
-									<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-									<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-								</svg>
-								</span>
-								<div className="tree-item-inner">{el.Text}</div>
-							</div>
-							<div>
-								<small className="tree-item-inner">
-									<a href={el.Url}>{el.Url}</a>
-								</small>
-							</div>
-						</div>
-					);
-				})}
-			</div>
+			<TreeView>
+			{externalLinks.map((el, index) => {
+				const nodeId = `${activeFile?.path}-${index}`;
+				return (
+					<TreeItem key={nodeId} nodeId={nodeId} label={ExternalLinkLabel(el)}>
+						{Array.from(urlToFiles.get(el.Url) ?? [])
+							.filter((file) => file.path !== activeFile?.path)
+							.map((file) => {
+									return (
+										<TreeItem
+											key={`${nodeId}-${file.name}`}
+											nodeId={`${nodeId}-${file.name}`}
+											label={RefListLabel(file)}
+											className="ref-list"
+										/>
+									);
+								}
+							)}
+					</TreeItem>
+				);
+			})}
+			</TreeView>
 		</div>
 	);
 };
+
+function ExternalLinkLabel(el: ExternalLink) {
+	return (
+		<div>
+			<div>{el.Text}</div>
+			<div>
+				<small>
+					<a href={el.Url}>{el.Url}</a>
+				</small>
+			</div>
+		</div>
+	)
+}
+
+
+function RefListLabel(file: TFile) {
+	return (
+		<div key={file.path} className="ref-list-item">
+			{file.basename}
+		</div>
+	);
+}
+
