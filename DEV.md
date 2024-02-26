@@ -22,3 +22,4 @@ ELH lets you configure which types of links to index in settings. I might do thi
 7. Change side panel icon
 8. Make sure things disappear if the active file is closed
 9. Show links in the order they appear in the file?
+10. Check this error message: "emotion-react.browser.esm.js:435 You are loading @emotion/react when it is already loaded. Running multiple instances may cause problems. This can happen if multiple versions are used, or if multiple builds of the same version are used."
