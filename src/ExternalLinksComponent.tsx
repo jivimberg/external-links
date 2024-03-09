@@ -58,71 +58,74 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 						<PublicIcon className="tree-item-icon"/>
 						<div className="tree-item-content">
 							<a className="tree-item-inner" href={el.Url}>{el.Url}</a>
-							{refList(nodeId, urlToFiles.get(el.Url), el, activeFile)}
+							{refList(nodeId, urlToFiles.get(el.Url), activeFile)}
 						</div>
 					</div>
 				);
 			})}
 		</div>
 	);
-};
 
-function refList(nodeId: string, refList: Set<TFile> | undefined, el: ExternalLink, activeFile: TFile | null) {
-	const filteredRefList = Array.from(refList ?? [])
-		.filter((file) => file.path !== activeFile?.path);
+	function refList(
+		nodeId: string,
+		refList: Set<TFile> | undefined,
+		activeFile: TFile | null
+	) {
+		const filteredRefList = Array.from(refList ?? [])
+			.filter((file) => file.path !== activeFile?.path);
 
-	if (filteredRefList.length === 0) {
-		return;
-	} else {
-		return (
-			// Make it gray on collapsed, white when open
-			<TreeView
-				defaultCollapseIcon={<ExpandMoreIcon />}
-				defaultExpandIcon={<ChevronRightIcon />}
-			>
-				<TreeItem
-					key={nodeId}
-					nodeId={nodeId}
-					className="tree-item-inner-subtext"
-					label={
-						<small>
-							Found in {filteredRefList.length} other note{filteredRefList.length > 1 ? "s" : ""}
-						</small>
-					}
+		if (filteredRefList.length === 0) {
+			return;
+		} else {
+			return (
+				// Make it gray on collapsed, white when open
+				<TreeView
+					defaultCollapseIcon={<ExpandMoreIcon />}
+					defaultExpandIcon={<ChevronRightIcon />}
 				>
-					{ filteredRefList
-						.map((file) => {
-								return fileRef(file);
-							}
-						)}
-				</TreeItem>
-			</TreeView>
-		);
+					<TreeItem
+						key={nodeId}
+						nodeId={nodeId}
+						className="tree-item-inner-subtext"
+						label={
+							<small>
+								Found in {filteredRefList.length} other note{filteredRefList.length > 1 ? "s" : ""}
+							</small>
+						}
+					>
+						{ filteredRefList
+							.map((file) => {
+									return fileRef(file);
+								}
+							)}
+					</TreeItem>
+				</TreeView>
+			);
 
+		}
 	}
-}
 
-
-function fileRef(file: TFile) {
-	const folder = file.parent?.name;
-	return (
-		<TreeItem
-			nodeId={file.path}
-			className="leaf-tree-item"
-			label={
-				<div className="tree-item-self">
-					<div className="tree-item-icon">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="svg-icon lucide-link">
-							<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-							<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-						</svg>
+	function fileRef(file: TFile) {
+		const folder = file.parent?.name;
+		return (
+			<TreeItem
+				nodeId={file.path}
+				className="leaf-tree-item"
+				label={
+					<div className="tree-item-self" onClick={() => props.app.workspace.getLeaf().openFile(file)}>
+						<div className="tree-item-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="svg-icon lucide-link">
+								<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+								<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+							</svg>
+						</div>
+						<div>
+							<div className="tree-item-inner">{file.name}</div>
+							{ folder ? <div className="tree-item-inner-subtext">{folder}</div> : null }
+						</div>
 					</div>
-					<div>
-						<div className="tree-item-inner">{file.name}</div>
-						{ folder ? <div className="tree-item-inner-subtext">{folder}</div> : null }
-					</div>
-				</div>
-			}
-		/>
-	);
-}
+				}
+			/>
+		);
+	}
+};
