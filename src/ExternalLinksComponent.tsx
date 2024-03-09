@@ -6,6 +6,7 @@ import {Indexer} from "./Indexer";
 import {TreeItem, TreeView} from "@mui/x-tree-view";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import PublicIcon from '@mui/icons-material/Public';
 
 type ExternalLinksViewProps = {
 	app: App;
@@ -50,54 +51,78 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 					<div className="tree-item-flair">{externalLinks.length}</div>
 				</div>
 			</div>
-			<TreeView
-				defaultCollapseIcon={<ExpandMoreIcon />}
-				defaultExpandIcon={<ChevronRightIcon />}
-			>
 			{externalLinks.map((el, index) => {
 				const nodeId = `${activeFile?.path}-${index}`;
 				return (
-					<TreeItem key={nodeId} nodeId={nodeId} label={ExternalLinkLabel(el)}>
-						{Array.from(urlToFiles.get(el.Url) ?? [])
-							.filter((file) => file.path !== activeFile?.path)
-							.map((file) => {
-									return (
-										<TreeItem
-											key={`${nodeId}-${file.name}`}
-											nodeId={`${nodeId}-${file.name}`}
-											label={RefListLabel(file)}
-											className="ref-list"
-										/>
-									);
-								}
-							)}
-					</TreeItem>
+					<div className="tree-item-self">
+						<PublicIcon className="tree-item-icon"/>
+						<div className="tree-item-content">
+							<a className="tree-item-inner" href={el.Url}>{el.Url}</a>
+							{refList(nodeId, urlToFiles.get(el.Url), el, activeFile)}
+						</div>
+					</div>
 				);
 			})}
-			</TreeView>
 		</div>
 	);
 };
 
-function ExternalLinkLabel(el: ExternalLink) {
-	return (
-		<div>
-			<div>{el.Text}</div>
-			<div>
-				<small>
-					<a href={el.Url}>{el.Url}</a>
-				</small>
-			</div>
-		</div>
-	)
+function refList(nodeId: string, refList: Set<TFile> | undefined, el: ExternalLink, activeFile: TFile | null) {
+	const filteredRefList = Array.from(refList ?? [])
+		.filter((file) => file.path !== activeFile?.path);
+
+	if (filteredRefList.length === 0) {
+		return;
+	} else {
+		return (
+			// Make it gray on collapsed, white when open
+			<TreeView
+				defaultCollapseIcon={<ExpandMoreIcon />}
+				defaultExpandIcon={<ChevronRightIcon />}
+			>
+				<TreeItem
+					key={nodeId}
+					nodeId={nodeId}
+					className="tree-item-inner-subtext"
+					label={
+						<small>
+							Found in {filteredRefList.length} other note{filteredRefList.length > 1 ? "s" : ""}
+						</small>
+					}
+				>
+					{ filteredRefList
+						.map((file) => {
+								return fileRef(file);
+							}
+						)}
+				</TreeItem>
+			</TreeView>
+		);
+
+	}
 }
 
 
-function RefListLabel(file: TFile) {
+function fileRef(file: TFile) {
+	const folder = file.parent?.name;
 	return (
-		<div key={file.path} className="ref-list-item">
-			{file.basename}
-		</div>
+		<TreeItem
+			nodeId={file.path}
+			className="leaf-tree-item"
+			label={
+				<div className="tree-item-self">
+					<div className="tree-item-icon">
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="svg-icon lucide-link">
+							<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+							<path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+						</svg>
+					</div>
+					<div>
+						<div className="tree-item-inner">{file.name}</div>
+						{ folder ? <div className="tree-item-inner-subtext">{folder}</div> : null }
+					</div>
+				</div>
+			}
+		/>
 	);
 }
-

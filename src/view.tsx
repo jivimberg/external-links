@@ -1,4 +1,4 @@
-import {ItemView, WorkspaceLeaf} from "obsidian";
+import {IconName, ItemView, WorkspaceLeaf} from "obsidian";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {createRoot} from "react-dom/client";
@@ -35,5 +35,9 @@ export class ExternalLinksView extends ItemView {
 
 	async onClose() {
 		ReactDOM.unmountComponentAtNode(this.containerEl);
+	}
+
+	getIcon(): IconName {
+		return "link-2";
 	}
 }

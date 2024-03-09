@@ -117,7 +117,6 @@ const scanFile = (content: string, file: TFile): ExternalLink[] => {
 
 	for (const mdLink of mdLinks) {
 		result.push(new ExternalLink(mdLink[1], mdLink[2], file));
-		console.log(mdLink[1], mdLink[2]);
 	}
 
 	const orphanedLinks = content.matchAll(orphanedLinkRegex);
