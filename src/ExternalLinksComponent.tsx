@@ -44,8 +44,8 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 	}, [activeFile, filePathToLinks, urlToFiles]);
 
 	return (
-		<div className="outgoing-link-pane">
-			<div className="tree-item-self">
+		<div>
+			<div className="tree-item-self external-links-header">
 				<div className="tree-item-inner">External links</div>
 				<div className="tree-item-flair-outer">
 					<div className="tree-item-flair">{externalLinks.length}</div>

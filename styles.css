@@ -4,6 +4,15 @@
 	width: 100%;
 }
 
+/* Do not header number on hover because it's not clickable */
+.tree-item-self:hover .tree-item-flair {
+	color: var(--text-faint);
+}
+
+.external-links-header {
+	padding: 4px 8px;
+}
+
 div.MuiTreeItem-content {
 	padding: 0;
 }
