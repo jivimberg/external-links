@@ -54,7 +54,7 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 			{externalLinks.map((el, index) => {
 				const nodeId = `${activeFile?.path}-${index}`;
 				return (
-					<div className="tree-item-self">
+					<div key={nodeId} className="tree-item-self">
 						<PublicIcon className="tree-item-icon"/>
 						<div className="tree-item-content">
 							<a className="tree-item-inner" href={el.Url}>{el.Url}</a>
@@ -94,10 +94,8 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 						}
 					>
 						{ filteredRefList
-							.map((file) => {
-									return fileRef(file);
-								}
-							)}
+							.map((file) => fileRef(nodeId, file))
+						}
 					</TreeItem>
 				</TreeView>
 			);
@@ -105,11 +103,13 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 		}
 	}
 
-	function fileRef(file: TFile) {
+	function fileRef(parentNodeId: string, file: TFile) {
 		const folder = file.parent?.name;
+		const nodeId = `${parentNodeId} | ${file.path}`;
 		return (
 			<TreeItem
-				nodeId={file.path}
+				key={nodeId}
+				nodeId={nodeId}
 				className="leaf-tree-item"
 				label={
 					<div className="tree-item-self" onClick={() => props.app.workspace.getLeaf().openFile(file)}>
