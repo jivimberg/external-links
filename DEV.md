@@ -11,6 +11,10 @@ I'll only focus on 1 and 3 for now. Because those are the ones that can be turne
 
 ELH lets you configure which types of links to index in settings. I might do this later.
 
+## Local Dev
+
+1. Run `npm run dev` 
+
 ## TODO
 
 * Write README

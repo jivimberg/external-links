@@ -104,7 +104,7 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 	}
 
 	function fileRef(parentNodeId: string, file: TFile) {
-		const folder = file.parent?.name;
+		const folder = file.parent?.path;
 		const nodeId = `${parentNodeId} | ${file.path}`;
 		return (
 			<TreeItem
@@ -120,7 +120,7 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 							</svg>
 						</div>
 						<div>
-							<div className="tree-item-inner">{file.name}</div>
+							<div className="tree-item-inner">{file.basename}</div>
 							{ folder ? <div className="tree-item-inner-subtext">{folder}</div> : null }
 						</div>
 					</div>
