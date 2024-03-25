@@ -8,4 +8,3 @@ It also shows what other notes link to a given link.
 
 ![ScreenshotExpanded.png](images%2FScreenshotExpanded.png)
 
-## Donate
