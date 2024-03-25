@@ -3,7 +3,7 @@
 	"name": "External Links",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Show external links on the right side panel",
+	"description": "List external links on the right side panel.",
 	"author": "Juan Vimberg",
 	"authorUrl": "https://github.com/jivimberg/",
 	"isDesktopOnly": false
