@@ -13,10 +13,10 @@ export class Indexer {
 	) {
 		plugin.registerEvent(
 			plugin.app.vault.on('modify', (file) => {
-				console.log('modify event');
 				if (file instanceof TFile) {
 					// Read the file and update the link indices
 					plugin.app.vault.cachedRead(file).then((content) => {
+						console.log('modify event');
 						const links = scanFile(content, file);
 						this.removeFileFromIndices(file.path);
 						this.addFileToIndices(file, links);
@@ -27,15 +27,15 @@ export class Indexer {
 		)
 		plugin.registerEvent(
 			plugin.app.vault.on('rename', (file, oldPath) => {
-				plugin.app.vault.cachedRead(file as TFile).then((content) => {
-					console.log('rename event');
-					if (file instanceof TFile) {
+				if (file instanceof TFile) {
+					plugin.app.vault.cachedRead(file).then((content) => {
+						console.log('rename event');
 						const links = scanFile(content, file);
 						this.removeFileFromIndices(oldPath);
 						this.addFileToIndices(file, links);
 						this.notifyListeners();
-					}
-				})
+					})
+				}
 			})
 		)
 		plugin.registerEvent(
@@ -108,7 +108,7 @@ export class Indexer {
 }
 
 const mdLinksRegex = /\[([^[]+)]\((https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*))\)/gm
-const orphanedLinkRegex = /(?<!["'<])(https?:\/\/[^\s)]+)(?!["'>])/gm
+const orphanedLinkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/gm
 
 const scanFile = (content: string, file: TFile): ExternalLink[] => {
 	const result: ExternalLink[] = [];
@@ -122,7 +122,7 @@ const scanFile = (content: string, file: TFile): ExternalLink[] => {
 	const orphanedLinks = content.matchAll(orphanedLinkRegex);
 
 	for (const orphanedLink of orphanedLinks) {
-		result.push(new ExternalLink(orphanedLink[1], orphanedLink[1], file));
+		result.push(new ExternalLink(orphanedLink[0], orphanedLink[0], file));
 	}
 
 	return result;
