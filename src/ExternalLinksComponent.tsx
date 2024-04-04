@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {ExternalLink} from "./ExternalLink";
-import {App, TFile} from "obsidian";
+import {App, Plugin, TFile} from "obsidian";
 import {Indexer} from "./Indexer";
 import {TreeItem, TreeView} from "@mui/x-tree-view";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -9,23 +9,23 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import PublicIcon from '@mui/icons-material/Public';
 
 type ExternalLinksViewProps = {
-	app: App;
+	plugin: Plugin;
 	indexer: Indexer;
 }
 
 export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
-	const [activeFile, setActiveFile] = useState<TFile | null>(props.app.workspace.getActiveFile());
+	const app = props.plugin.app;
+	const [activeFile, setActiveFile] = useState<TFile | null>(app.workspace.getActiveFile());
 
-	props.app.workspace.on("active-leaf-change", () => {
-		setActiveFile(props.app.workspace.getActiveFile());
-	});
+	props.plugin.registerEvent(app.workspace.on("active-leaf-change", () => {
+		setActiveFile(app.workspace.getActiveFile());
+	}));
 
 	const [filePathToLinks, setFilePathToLinks] = useState<Map<string, ExternalLink[]>>(props.indexer.filePathToLinks);
 	const [urlToFiles, setUrlToFiles] = useState<Map<string, Set<TFile>>>(props.indexer.urlToFiles);
 
 	useEffect(() => {
 		props.indexer.addListener((filePathToLinks, urlToFiles) => {
-			console.log("Listener notified");
 			// Need to create new map objects for useEffects to trigger
 			setFilePathToLinks(new Map(filePathToLinks));
 			setUrlToFiles(new Map(urlToFiles));
@@ -112,7 +112,7 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 				nodeId={nodeId}
 				className="leaf-tree-item"
 				label={
-					<div className="tree-item-self" onClick={() => props.app.workspace.getLeaf().openFile(file)}>
+					<div className="tree-item-self" onClick={() => app.workspace.getLeaf().openFile(file)}>
 						<div className="tree-item-icon">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="svg-icon lucide-link">
 								<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>

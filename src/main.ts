@@ -7,23 +7,16 @@ export default class ExternalLinksPlugin extends Plugin {
 	indexer: Indexer;
 
 	async onload() {
-		console.log('loading plugin');
 		this.indexer = new Indexer(this);
 
 		this.app.workspace.onLayoutReady(() => {
 			return this.indexer.scanAllFiles();
 		});
 
-		this.indexer.scanAllFiles()
-
 		this.registerView(
 			VIEW_TYPE_EXTERNAL_LINK_VIEW,
 			(leaf) => new ExternalLinksView(leaf, this)
 		);
-
-		this.addRibbonIcon("dice", "Activate view", () => {
-			this.activateView();
-		});
 	}
 
 	onunload() {

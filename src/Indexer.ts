@@ -16,7 +16,6 @@ export class Indexer {
 				if (file instanceof TFile) {
 					// Read the file and update the link indices
 					plugin.app.vault.cachedRead(file).then((content) => {
-						console.log('modify event');
 						const links = scanFile(content, file);
 						this.removeFileFromIndices(file.path);
 						this.addFileToIndices(file, links);
@@ -29,7 +28,6 @@ export class Indexer {
 			plugin.app.vault.on('rename', (file, oldPath) => {
 				if (file instanceof TFile) {
 					plugin.app.vault.cachedRead(file).then((content) => {
-						console.log('rename event');
 						const links = scanFile(content, file);
 						this.removeFileFromIndices(oldPath);
 						this.addFileToIndices(file, links);
@@ -40,7 +38,6 @@ export class Indexer {
 		)
 		plugin.registerEvent(
 			plugin.app.vault.on('delete', (file) => {
-				console.log('delete event');
 				if (file instanceof TFile) {
 					this.removeFileFromIndices(file.path);
 					this.notifyListeners();

@@ -26,7 +26,7 @@ export class ExternalLinksView extends ItemView {
 		root.render(
 			<React.StrictMode>
 				<ExternalLinksComponent
-					app={this.plugin.app}
+					plugin={this.plugin}
 					indexer={this.plugin.indexer}
 				/>
 			</React.StrictMode>
