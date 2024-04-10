@@ -13,6 +13,8 @@ export default class ExternalLinksPlugin extends Plugin {
 			return this.indexer.scanAllFiles();
 		});
 
+		console.log("ExternalLinks - Registering view");
+
 		this.registerView(
 			VIEW_TYPE_EXTERNAL_LINK_VIEW,
 			(leaf) => new ExternalLinksView(leaf, this)
