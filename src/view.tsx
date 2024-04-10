@@ -11,7 +11,6 @@ export class ExternalLinksView extends ItemView {
 
 	constructor(leaf: WorkspaceLeaf, public plugin: ExternalLinksPlugin) {
 		super(leaf);
-		console.log("ExternalLinks - ExternalLinks View created");
 	}
 
 	getViewType() {
