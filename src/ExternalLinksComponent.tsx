@@ -1,12 +1,10 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import {ExternalLink} from "./ExternalLink";
-import {App, Plugin, TFile} from "obsidian";
+import {Plugin, TFile} from "obsidian";
 import {Indexer} from "./Indexer";
 import {TreeItem, TreeView} from "@mui/x-tree-view";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import PublicIcon from '@mui/icons-material/Public';
+import {ChevronDown, ChevronRight, Earth, Link2} from "lucide-react";
 
 type ExternalLinksViewProps = {
 	plugin: Plugin;
@@ -55,7 +53,7 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 				const nodeId = `${activeFile?.path}-${index}`;
 				return (
 					<div key={nodeId} className="tree-item-self">
-						<PublicIcon className="tree-item-icon"/>
+						<Link2 className="tree-item-icon"/>
 						<div className="tree-item-content">
 							<a className="tree-item-inner" href={el.Url}>{el.Url}</a>
 							{refList(nodeId, urlToFiles.get(el.Url), activeFile)}
@@ -80,8 +78,8 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 			return (
 				// Make it gray on collapsed, white when open
 				<TreeView
-					defaultCollapseIcon={<ExpandMoreIcon />}
-					defaultExpandIcon={<ChevronRightIcon />}
+					defaultCollapseIcon={<ChevronRight />}
+					defaultExpandIcon={<ChevronDown />}
 				>
 					<TreeItem
 						key={nodeId}
