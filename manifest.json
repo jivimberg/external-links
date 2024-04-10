@@ -1,7 +1,7 @@
 {
 	"id": "external-links",
 	"name": "External Links",
-	"version": "1.0.3",
+	"version": "1.0.4",
 	"minAppVersion": "0.15.0",
 	"description": "List external links and discover which notes reference them.",
 	"author": "Juan Vimberg",
