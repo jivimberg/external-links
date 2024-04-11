@@ -119,6 +119,16 @@ const scanFile = (content: string, file: TFile): ExternalLink[] => {
 	const orphanedLinks = content.matchAll(orphanedLinkRegex);
 
 	for (const orphanedLink of orphanedLinks) {
+		// Filtering markdown links. Has to be done this way because Apple does not support negative lookbehind regex
+		const index = orphanedLink.index;
+		if (index !== undefined && index > 1) {
+			const precedingChars = content.slice(index - 2, index);
+			if (precedingChars === "](") {
+				// This is a markdown link, ignore it
+				continue;
+			}
+		}
+
 		result.push(new ExternalLink(orphanedLink[0], orphanedLink[0], file));
 	}
 
