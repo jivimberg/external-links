@@ -55,7 +55,7 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 					<div key={nodeId} className="tree-item-self">
 						<Link2 className="tree-item-icon"/>
 						<div className="tree-item-content">
-							<a className="tree-item-inner" href={el.Url}>{el.Url}</a>
+							<a className="tree-item-inner" href={el.Url}>{el.Text}</a>
 							{refList(nodeId, urlToFiles.get(el.Url), activeFile)}
 						</div>
 					</div>
