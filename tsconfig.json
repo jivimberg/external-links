@@ -10,14 +10,20 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "isolatedModules": true,
-	"strictNullChecks": true,
-  	"jsx": "react",
+    "strictNullChecks": true,
+    "jsx": "react",
+	"esModuleInterop": true,
+    "paths": {
+      "*": [
+        "node_modules/*"
+      ]
+    },
     "lib": [
       "DOM",
       "ES5",
       "ES6",
       "ES7"
-    ],
+    ]
   },
   "include": [
     "**/*.ts"

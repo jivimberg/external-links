@@ -106,18 +106,19 @@ export class Indexer {
 
 const mdLinksRegex = /\[([^[]+)]\((https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*))\)/gm
 const orphanedLinkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/gm
+const filePathRegex = /file:\/\/[-a-zA-Z0-9@:%._+~#=/]{1,256}/gm
 
-const scanFile = (content: string, file: TFile): ExternalLink[] => {
+export const scanFile = (content: string, file: TFile): ExternalLink[] => {
 	const result: ExternalLink[] = [];
 
+	// Find all markdown links
 	const mdLinks = content.matchAll(mdLinksRegex);
-
 	for (const mdLink of mdLinks) {
 		result.push(new ExternalLink(mdLink[1], mdLink[2], file));
 	}
 
+	// Find all orphaned links
 	const orphanedLinks = content.matchAll(orphanedLinkRegex);
-
 	for (const orphanedLink of orphanedLinks) {
 		// Filtering markdown links. Has to be done this way because Apple does not support negative lookbehind regex
 		const index = orphanedLink.index;
@@ -130,6 +131,12 @@ const scanFile = (content: string, file: TFile): ExternalLink[] => {
 		}
 
 		result.push(new ExternalLink(orphanedLink[0], orphanedLink[0], file));
+	}
+
+	// Find all file links
+	const fileLinks = content.matchAll(filePathRegex);
+	for (const fileLink of fileLinks) {
+		result.push(new ExternalLink(fileLink[0], fileLink[0], file));
 	}
 
 	return result;
