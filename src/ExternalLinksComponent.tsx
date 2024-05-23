@@ -4,7 +4,8 @@ import {ExternalLink} from "./ExternalLink";
 import {Plugin, TFile} from "obsidian";
 import {Indexer} from "./Indexer";
 import {TreeItem, TreeView} from "@mui/x-tree-view";
-import {ChevronDown, ChevronRight, Earth, Link2} from "lucide-react";
+import {ChevronDown, ChevronRight, Earth, File} from "lucide-react";
+import {shell} from 'electron';
 
 type ExternalLinksViewProps = {
 	plugin: Plugin;
@@ -53,9 +54,20 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 				const nodeId = `${activeFile?.path}-${index}`;
 				return (
 					<div key={nodeId} className="tree-item-self">
-						<Link2 className="tree-item-icon"/>
+						{el.Url.startsWith("http") ? <Earth className="tree-item-icon"/> : <File className="tree-item-icon" />}
 						<div className="tree-item-content">
-							<a className="tree-item-inner" href={el.Url}>{el.Url}</a>
+							<a
+								className="tree-item-inner"
+								href={el.Url.startsWith("http") ? el.Url : `#`}
+								onClick={(event) => {
+									if (el.Url.startsWith("file://")) {
+										event.preventDefault();
+										shell.openExternal(el.Url)
+									}
+								}}
+							>
+								{el.Url}
+							</a>
 							{refList(nodeId, urlToFiles.get(el.Url), activeFile)}
 						</div>
 					</div>
