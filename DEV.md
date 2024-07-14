@@ -19,6 +19,8 @@ ELH lets you configure which types of links to index in settings. I might do thi
 
 Follow these steps: https://docs.obsidian.md/Plugins/Releasing/Release+your+plugin+with+GitHub+Actions
 
+After adding the tag wait until the Github action runs and generates the main.js file before creating a new release. Might take a few minutes.
+
 ## TODO
 
 * Check this error message: "emotion-react.browser.esm.js:435 You are loading @emotion/react when it is already loaded. Running multiple instances may cause problems. This can happen if multiple versions are used, or if multiple builds of the same version are used."
