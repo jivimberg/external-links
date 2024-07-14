@@ -13,11 +13,14 @@ ELH lets you configure which types of links to index in settings. I might do thi
 
 ## Local Dev
 
-1. Run `npm run dev` 
+1. Run `npm run dev`
+
+## Releasing
+
+Follow these steps: https://docs.obsidian.md/Plugins/Releasing/Release+your+plugin+with+GitHub+Actions
 
 ## TODO
 
-* Write README
 * Check this error message: "emotion-react.browser.esm.js:435 You are loading @emotion/react when it is already loaded. Running multiple instances may cause problems. This can happen if multiple versions are used, or if multiple builds of the same version are used."
 
 ## Ideas for future

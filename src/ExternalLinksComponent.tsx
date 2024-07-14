@@ -56,6 +56,7 @@ export const ExternalLinksComponent = (props: ExternalLinksViewProps) => {
 					<div key={nodeId} className="tree-item-self">
 						{el.Url.startsWith("http") ? <Earth className="tree-item-icon"/> : <File className="tree-item-icon" />}
 						<div className="tree-item-content">
+							{el.Text !== el.Url && el.Text.trim() !== "" && <span>{el.Text}</span>}
 							<a
 								className="tree-item-inner"
 								href={el.Url.startsWith("http") ? el.Url : `#`}
