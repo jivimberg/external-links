@@ -18,33 +18,20 @@ export default class ExternalLinksPlugin extends Plugin {
 			(leaf) => new ExternalLinksView(leaf, this)
 		);
 
-		await this.activateView();
+		this.addCommand({
+			id: 'show-external-links',
+			name: 'Show external links',
+			callback: () => {
+				this.activateView();
+			},
+		});
 	}
 
-	onunload() {
-
+	onUserEnable() {
+		this.activateView();
 	}
 
 	async activateView() {
-		const { workspace } = this.app;
-
-		let leaf: WorkspaceLeaf | null = null;
-		const leaves = workspace.getLeavesOfType(VIEW_TYPE_EXTERNAL_LINK_VIEW);
-
-		if (leaves.length > 0) {
-			// A leaf with our view already exists, use that
-			leaf = leaves[0];
-		} else {
-			// Our view could not be found in the workspace, create a new leaf
-			// in the right sidebar for it
-			leaf = workspace.getRightLeaf(false);
-			await leaf?.setViewState({ type: VIEW_TYPE_EXTERNAL_LINK_VIEW, active: true });
-		}
-
-		// "Reveal" the leaf in case it is in a collapsed sidebar
-		if (leaf) {
-			workspace.revealLeaf(leaf);
-		}
+		await this.app.workspace.ensureSideLeaf(VIEW_TYPE_EXTERNAL_LINK_VIEW, 'right');
 	}
-
 }
