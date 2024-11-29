@@ -106,7 +106,25 @@ export class Indexer {
 
 const mdLinksRegex = /\[([^[]+)]\((https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*))\)/gm
 const orphanedLinkRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&/=]*)/gm
-const filePathRegex = /file:\/\/[-a-zA-Z0-9@:%._+~#=/]{1,256}/gm
+
+/*
+ * Regex Explanation:
+ * \(?: Matches an optional opening parenthesis `(`. This ensures that the regex can handle URLs that are wrapped in parentheses.
+ * file:\/\/: Matches the literal string `file://` at the start of a file URL.
+ * (?:[a-zA-Z]:\/|\/)?: Matches an optional Windows drive letter followed by a colon and forward slash (e.g., `C:/`)
+ *                      or a leading forward slash `/` for Unix-like paths. This is a non-capturing group.
+ * (?:[^\s<>:"|?*]+\/)*: Matches a sequence of valid directory names separated by forward slashes:
+ *   - [^\s<>:"|?*]+: Matches one or more characters that are not whitespace or invalid file path characters (<>:"|?*).
+ *   - \/: Matches a literal forward slash `/` as a directory separator.
+ *   - The entire group repeats to allow matching multiple nested directories.
+ * [^\s<>:"|?*]+: Matches the final component of the file path, such as the file or folder name.
+ * (?:\.[a-zA-Z0-9]+)?: Matches an optional file extension:
+ *   - \.: Matches a literal dot.
+ *   - [a-zA-Z0-9]+: Matches one or more alphanumeric characters, representing the file extension (e.g., `.txt`, `.pdf`).
+ * \)?: Matches an optional closing parenthesis `)`. This ensures that the regex can handle URLs that are wrapped in parentheses.
+ * g: Global flag to find all matches in the input string, not just the first one.
+ */
+const filePathRegex = /\(?file:\/\/(?:[a-zA-Z]:\/|\/)?(?:[^\s<>:"|?*]+\/)*[^\s<>:"|?*]+(?:\.[a-zA-Z0-9]+)?\)?/g;
 
 export const scanFile = (content: string, file: TFile): ExternalLink[] => {
 	const result: ExternalLink[] = [];
@@ -136,7 +154,12 @@ export const scanFile = (content: string, file: TFile): ExternalLink[] => {
 	// Find all file links
 	const fileLinks = content.matchAll(filePathRegex);
 	for (const fileLink of fileLinks) {
-		result.push(new ExternalLink(fileLink[0], fileLink[0], file));
+		let url = fileLink[0];
+		// Remove wrapping parentheses if present. Has to be done this way because Apple does not support negative lookbehind regex
+		if (url.startsWith('(') && url.endsWith(')')) {
+			url = url.slice(1, -1);
+		}
+		result.push(new ExternalLink(url, url, file));
 	}
 
 	return result;

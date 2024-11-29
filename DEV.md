@@ -7,7 +7,7 @@ There are 3 types of links to be considered:
 3. Orphaned links (plain text URLs)
 4. Relative links to other vault files
 
-I'll only focus on 1 and 3 for now. Because those are the ones that can be turned into Obsidian Links.
+I'll only focus on 1, 2 and 3 for now. Because those are the ones that can be turned into Obsidian Links.
 
 ELH lets you configure which types of links to index in settings. I might do this later.
 
@@ -27,6 +27,6 @@ After adding the tag wait until the Github action runs and generates the main.js
 
 ## Ideas for future
 
-*  Show external links count on editor status bar 
+* Show external links count on editor status bar 
 * Command to replace external link with Obsidian Link
-  * (If 4) Ability to let users customize the template for the generated Obsidian Link
+  * Ability to let users customize the template for the generated Obsidian Link
